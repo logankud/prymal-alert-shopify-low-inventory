@@ -197,7 +197,10 @@ for r in range(len(result_df)):
 
 
 # Initialize a boto3 client for SNS
-sns_client = boto3.client('sns', region_name='us-east-1')  
+sns_client = boto3.client('sns', 
+                                region_name='us-east-1',
+                                 aws_access_key_id=AWS_ACCESS_KEY,
+                                 aws_secret_access_key=AWS_ACCESS_SECRET)  
 
 # Specify the SNS topic ARN
 topic_arn = 'arn:aws:sns:us-east-1:925570149811:prymal_alerts'  
