@@ -9,8 +9,8 @@ import numpy as np
 from datetime import timedelta
 
 
-AWS_ACCESS_KEY_ID=os.environ['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY=os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_ACCESS_KEY=os.environ['AWS_ACCESS_KEY']
+AWS_ACCESS_SECRET=os.environ['AWS_ACCESS_SECRET']
 
 
 # ---------------------------------------
@@ -26,8 +26,8 @@ def run_athena_query(query:str, database: str, region:str):
     # Initialize Athena client
     athena_client = boto3.client('athena', 
                                  region_name=region,
-                                 aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
-                                 aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'])
+                                 aws_access_key_id=AWS_ACCESS_KEY,
+                                 aws_secret_access_key=AWS_ACCESS_SECRET)
 
     # Execute the query
     try:
