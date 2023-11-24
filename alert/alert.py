@@ -173,8 +173,8 @@ result_df.columns = ['sku','sku_name','forecast','lower_bound','upper_bound','in
 
 # Set data type
 result_df['days_of_stock_onhand'] = result_df['days_of_stock_onhand'].astype(int)
-result_df['lower_bound'] = result_df['lower_bound'].astype(int)
-result_df['upper_bound'] = result_df['upper_bound'].astype(int)
+result_df['lower_bound'] = result_df['lower_bound'].astype(float).astype(int)
+result_df['upper_bound'] = result_df['upper_bound'].astype(float).astype(int)
 
 
 logger.info('Constructing alert details string')
