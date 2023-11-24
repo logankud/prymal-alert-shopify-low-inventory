@@ -173,6 +173,8 @@ result_df.columns = ['sku','sku_name','forecast','lower_bound','upper_bound','in
 
 # Set data type
 result_df['days_of_stock_onhand'] = result_df['days_of_stock_onhand'].astype(int)
+result_df['lower_bound'] = result_df['lower_bound'].astype(int)
+result_df['upper_bound'] = result_df['upper_bound'].astype(int)
 
 
 logger.info('Constructing alert details string')
@@ -186,14 +188,21 @@ for r in range(len(result_df)):
     product = result_df.loc[r,'sku_name']
     stock_days = result_df.loc[r,'days_of_stock_onhand']
 
+    daily_qty_upper_bound = result_df.loc[r,'upper_bound']
+    daily_qty_lower_bound = result_df.loc[r,'lower_bound']
+
 
     if stock_days == 0:
 
-        alert_details += f'{product} : Out of stock \n'
+        alert_details += f"""{product} : Out of stock \n\n """
 
     else:
 
-        alert_details += f'{product} : ~{stock_days} days of stock on hand \n'
+        alert_details += f"""{product} : ~{stock_days} days of stock on hand \n
+        30-day Replenishment Qty Range: {daily_qty_lower_bound * 30} - {daily_qty_upper_bound * 30} \n
+        60-day Replenishment Qty Range: {daily_qty_lower_bound * 60} - {daily_qty_upper_bound * 60} \n
+        90-day Replenishment Qty Range: {daily_qty_lower_bound * 90} - {daily_qty_upper_bound * 90} \n\n
+        """
 
 
 # Initialize a boto3 client for SNS
@@ -208,7 +217,9 @@ topic_arn = 'arn:aws:sns:us-east-1:925570149811:prymal_alerts'
 # Email subject and message
 subject = "Shopify Low Stock Alert"
 
-message = f'The following core flavors are low stock (less than 30 days of inventory on hand): \n \n {alert_details}'
+message = f"""The following core flavors are low stock (less than 30 days of inventory on hand): \n \n {alert_details} 
+
+"""
 
 logger.info('Sending SNS alert')
 
